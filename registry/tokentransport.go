@@ -42,7 +42,8 @@ func (t *TokenTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 type authToken struct {
-	Token string `json:"token"`
+	Token       string `json:"token"`
+	AccessToken string `json:"access_token"`
 }
 
 func (t *TokenTransport) authAndRetry(authService *authService, req *http.Request) (*http.Response, error) {
@@ -80,6 +81,13 @@ func (t *TokenTransport) auth(authService *authService) (string, *http.Response,
 	err = decoder.Decode(&authToken)
 	if err != nil {
 		return "", nil, err
+	}
+
+	// `access_token` is equivalent to `token` and if both are specified
+	// the choice is undefined.  Canonicalize `access_token` by sticking
+	// things in `token`.
+	if authToken.AccessToken != "" {
+		authToken.Token = authToken.AccessToken
 	}
 
 	return authToken.Token, nil, nil

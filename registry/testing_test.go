@@ -10,9 +10,9 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/ToothlessGear/docker-registry-client/registry"
 	"github.com/docker/distribution"
-	"github.com/nokia/docker-registry-client/registry"
-	"github.com/opencontainers/go-digest"
+	digest "github.com/opencontainers/go-digest"
 )
 
 // Expected stores the expected results of various tests
